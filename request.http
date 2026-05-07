@@ -1,0 +1,57 @@
+# Restclient requests for examples/url-shortener/main.lisp
+# Start the app first:
+#   sbcl --load examples/url-shortener/main.lisp
+
+# restclient variable syntax
+:base = http://localhost:3000
+
+# Index
+GET :base/
+
+#
+# Health
+GET :base/health
+
+#
+# Create short URL (form-urlencoded)
+POST :base/api/v1/links
+Content-Type: application/x-www-form-urlencoded
+
+url=https://example.com/docs/wst
+
+#
+# Create short URL (JSON)
+POST :base/api/v1/links
+Content-Type: application/json
+
+{"url":"https://common-lisp.net"}
+
+#
+# List all short URLs
+GET :base/api/v1/links
+
+#
+# Inspect one short URL by code
+# Replace `1` with an existing code from the create response.
+GET :base/api/v1/links/1
+
+#
+# Resolve short URL by code (redirect)
+# Replace `1` with an existing code.
+GET :base/1
+
+#
+# Delete one short URL by code
+# Replace `1` with an existing code.
+DELETE :base/api/v1/links/1
+
+#
+# Invalid create request (missing url)
+POST :base/api/v1/links
+Content-Type: application/json
+
+{"target":"https://example.com"}
+
+#
+# Fallback any-route
+GET :base/does-not-exist
