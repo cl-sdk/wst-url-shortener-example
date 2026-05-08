@@ -11,6 +11,7 @@
                #:woo)
   :serial t
   :pathname "src"
-  :components ((:file "domain")
+  :components ((:file "utils")
+               (:file "domain")
                (:file "api")
                (:file "main")))

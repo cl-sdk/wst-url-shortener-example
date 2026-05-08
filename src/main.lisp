@@ -5,9 +5,6 @@
          (response (wst.routing:dispatch-route request)))
     (wst.routing.woo:response-to-woo-response response)))
 
-(defconstant +sigint+ 2)
-(defconstant +sigquit+ 3)
-(defconstant +sigterm+ 15)
 (defparameter *server-port* 3000)
 (defparameter *server-running-p* nil)
 (defparameter *restart-requested-p* nil)
@@ -21,17 +18,6 @@
      ,@body)
   #-sbcl
   `(progn ,@body))
-
-(defun woo-signal-symbol (name)
-  (or (find-symbol name :woo.signal)
-      (error "Woo internal symbol ~a not found in package WOO.SIGNAL" name)))
-
-(defun make-graceful-shutdown-signals ()
-  "Map SIGINT/SIGQUIT/SIGTERM to Woo's graceful shutdown callback."
-  (let ((graceful-callback-symbol (woo-signal-symbol "SIGQUIT-CB")))
-    (list (cons +sigint+ graceful-callback-symbol)
-          (cons +sigquit+ graceful-callback-symbol)
-          (cons +sigterm+ graceful-callback-symbol))))
 
 (defun request-graceful-stop ()
   #+sbcl

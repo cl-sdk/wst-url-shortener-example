@@ -5,17 +5,6 @@
 
 (defparameter *base-url* "http://localhost:3000")
 
-(defun request-url (request)
-  (let ((body (wst.routing:request-content request)))
-    (cond
-      ((hash-table-p body)
-       (or (gethash "url" body)
-           (gethash :url body)))
-      ((listp body)
-       (or (cdr (assoc "url" body :test #'string=))
-           (cdr (assoc :url body))))
-      (t nil))))
-
 (defun index-handler (request response)
   (declare (ignore request))
   (wst.routing:ok-response
@@ -46,10 +35,6 @@
            :headers (list :location short-path)
            :content (format nil "short_url=~a~%code=~a~%target=~a"
                             short-url code target-url))))))
-
-(defun request-short-code (request)
-  (wst.routing:with-request-data (params) request
-    (cdr (assoc "code" params :test #'string-equal))))
 
 (defun list-short-urls-handler (request response)
   (declare (ignore request))
