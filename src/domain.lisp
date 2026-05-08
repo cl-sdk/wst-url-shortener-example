@@ -1,3 +1,8 @@
+(eval-when (:compile-toplevel :load-toplevel :execute)
+  (unless (find-package '#:wst.example.url-shortener)
+    (defpackage #:wst.example.url-shortener
+      (:use #:cl))))
+
 (in-package #:wst.example.url-shortener)
 
 (defparameter *short-url-store* (make-hash-table :test 'equal))

@@ -1,6 +1,3 @@
-(defpackage #:wst.example.url-shortener
-  (:use #:cl))
-
 (in-package #:wst.example.url-shortener)
 
 (defun app (env)
@@ -79,3 +76,5 @@
     (if running-p
         (request-graceful-stop)
         (start-server :port target-port))))
+
+(start-server)

@@ -104,5 +104,3 @@
                                (wst.routing.dsl:route :DELETE delete-short-url "/links/:code" delete-short-url-handler))
      (wst.routing.dsl:route :GET redirect-short-url "/:code" redirect-short-url-handler)
      (wst.routing.dsl:any-route :GET not-found-handler))))
-
-(start-server)
