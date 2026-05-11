@@ -1,5 +1,8 @@
 (in-package #:wst.example.url-shortener)
 
+(defconstant +base62-alphabet+ "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ")
+(defconstant +http-scheme-prefix+ "http://")
+(defconstant +https-scheme-prefix+ "https://")
 (defconstant +sigint+ 2)
 (defconstant +sigquit+ 3)
 (defconstant +sigterm+ 15)
