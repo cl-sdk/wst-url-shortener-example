@@ -86,8 +86,8 @@
        (io.github.cl-sdk.wst.routing.dsl:resource "/links"
 						  (io.github.cl-sdk.wst.routing.dsl:route :POST create-short-url create-short-url-handler)
 						  (io.github.cl-sdk.wst.routing.dsl:route :GET list-short-urls list-short-urls-handler)
-						  (io.github.cl-sdk.wst.routing.dsl:route :GET inspect-short-url inspect-short-url-handler)
-						  (io.github.cl-sdk.wst.routing.dsl:route :DELETE delete-short-url delete-short-url-handler))))
+						  (io.github.cl-sdk.wst.routing.dsl:route :GET inspect-short-url "/:code" inspect-short-url-handler)
+						  (io.github.cl-sdk.wst.routing.dsl:route :DELETE delete-short-url "/:code" delete-short-url-handler))))
      (io.github.cl-sdk.wst.routing.dsl:route :GET redirect-short-url "/:code" redirect-short-url-handler)
      (io.github.cl-sdk.wst.routing.dsl:any-route :GET not-found-handler))))
 
