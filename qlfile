@@ -1,1 +1,1 @@
-github wst cl-sdk/wst :branch main
+github wst cl-sdk/wst :tag 0.1.0

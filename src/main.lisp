@@ -1,10 +1,5 @@
 (in-package #:wst.example.url-shortener)
 
-(defun app (env)
-  (let* ((request (wst.routing.woo:request-from-woo-env env))
-         (response (wst.routing:dispatch-route request)))
-    (wst.routing.woo:response-to-woo-response response)))
-
 (defparameter *server-port* 3000)
 (defparameter *server-running-p* nil)
 (defparameter *restart-requested-p* nil)
