@@ -11,7 +11,8 @@
 	       #:io.github.cl-sdk.wst.routing.dsl
 	       #:io.github.cl-sdk.wst.routing.woo
 	       #:io.github.cl-sdk.wst.request-content
-	       #:io.github.cl-sdk.wst.request-content.routing)
+	       #:io.github.cl-sdk.wst.request-content.routing
+	       #:io.github.cl-sdk.wst.routing.response.dsl)
   :serial t
   :pathname "src"
   :components ((:file "package")

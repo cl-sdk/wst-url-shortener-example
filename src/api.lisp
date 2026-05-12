@@ -99,22 +99,22 @@
   (condition-handler #'development-condition-handler)
 
   (io.github.cl-sdk.wst.routing.dsl:build-webserver
-   `(io.github.cl-sdk.wst.routing.dsl:wrap
+   `(:wrap
      :before (,*parse-content-middleware*)
      :route
-     (io.github.cl-sdk.wst.routing.dsl:group
-      (io.github.cl-sdk.wst.routing.dsl:route :GET health "/health" health-handler)
-      (io.github.cl-sdk.wst.routing.dsl:resource
+     (:group
+      (:route :GET health "/health" health-handler)
+      (:resource
        "/api/v1"
-       (io.github.cl-sdk.wst.routing.dsl:group
-	(io.github.cl-sdk.wst.routing.dsl:resource
+       (:group
+	(:resource
 	 "/links"
-	 (io.github.cl-sdk.wst.routing.dsl:route :POST create-short-url create-short-url-handler)
-	 (io.github.cl-sdk.wst.routing.dsl:route :GET list-short-urls list-short-urls-handler)
-	 (io.github.cl-sdk.wst.routing.dsl:route :GET inspect-short-url "/:code" inspect-short-url-handler)
-	 (io.github.cl-sdk.wst.routing.dsl:route :DELETE delete-short-url "/:code" delete-short-url-handler))))
-      (io.github.cl-sdk.wst.routing.dsl:route :GET redirect-short-url "/:code" redirect-short-url-handler)
-      (io.github.cl-sdk.wst.routing.dsl:any-route :GET not-found-handler)))))
+	 (:route :POST create-short-url create-short-url-handler)
+	 (:route :GET list-short-urls list-short-urls-handler)
+	 (:route :GET inspect-short-url "/:code" inspect-short-url-handler)
+	 (:route :DELETE delete-short-url "/:code" delete-short-url-handler))))
+      (:route :GET redirect-short-url "/:code" redirect-short-url-handler)
+      (:any-route :GET not-found-handler)))))
 
 (defun app (env)
   (let* ((request (request-from-woo-env env))
