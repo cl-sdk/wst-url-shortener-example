@@ -29,9 +29,7 @@
 
 (defun all-short-urls ()
   (with-short-url-store-lock
-    (loop for code being the hash-keys of *short-url-store*
-	    using (hash-value target-url)
-          collect (cons code target-url))))
+    *short-url-store*))
 
 (defun normalize-target-url (url)
   (when (stringp url)

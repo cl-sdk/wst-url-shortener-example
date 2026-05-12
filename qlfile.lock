@@ -14,3 +14,11 @@
  (:class qlot/source/github:source-github
   :initargs (:repos "cl-sdk/meta-definitions" :ref nil :branch "main" :tag nil)
   :version "github-41e5c29f68181d0d6eee0a627b94b70ab2402019"))
+("cl-hash-util" .
+ (:class qlot/source/github:source-github
+  :initargs (:repos "orthecreedence/cl-hash-util" :ref nil :branch "master" :tag nil)
+  :version "github-7f88cb7579b2af8c21022554f46dddd6ce6a5fc2"))
+("serapeum" .
+ (:class qlot/source/github:source-github
+  :initargs (:repos "ruricolist/serapeum" :ref nil :branch "master" :tag nil)
+  :version "github-c4dcbb6e48e9b713ba66fdee480a84384ef3dac4"))
