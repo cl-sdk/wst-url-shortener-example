@@ -1,7 +1,7 @@
 (in-package #:wst.example.url-shortener)
 
 (defparameter *short-url-store* (make-hash-table :test 'equal))
-(defparameter *next-short-id* 0)
+(defparameter *next-short-id* 100000000000000000)
 #+sbcl
 (defparameter *short-url-store-lock*
   (sb-thread:make-mutex :name "woo-url-shortener-store"))
