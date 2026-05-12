@@ -37,7 +37,7 @@
 	  (serapeum:~>>
 	   response
 	   (status 201)
-	   (headers (list :location short-path))
+	   (location short-path)
 	   (json :json (cl-hash-util:hash ("code" code)
 					  ("target" target-url)
 					  ("short_url" short-url))))))))
@@ -87,7 +87,7 @@
 	(serapeum:~>>
 	 response
 	 (status 303)
-	 (headers (list :location target-url))
+	 (location target-url)
 	 (text ""))
 	(response-not-found response))))
 

@@ -5,6 +5,7 @@
 	#:io.github.cl-sdk.wst.request-content
 	#:io.github.cl-sdk.wst.request-content.routing)
   (:import-from #:io.github.cl-sdk.wst.routing.response.dsl
+		#:location
 		#:text
 		#:headers
 		#:json
