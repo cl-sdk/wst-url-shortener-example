@@ -1,1 +1,3 @@
 github wst cl-sdk/wst :tag 0.1.0
+github io.github.cl-sdk.json cl-sdk/io.github.cl-sdk.json :branch main
+github meta-definitions cl-sdk/meta-definitions :branch main

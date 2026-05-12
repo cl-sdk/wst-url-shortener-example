@@ -6,3 +6,11 @@
  (:class qlot/source/github:source-github
   :initargs (:repos "cl-sdk/wst" :ref nil :branch nil :tag "0.1.0")
   :version "github-f3dc8634a352541506d94c06d085a860b9b5566a"))
+("io.github.cl-sdk.json" .
+ (:class qlot/source/github:source-github
+  :initargs (:repos "cl-sdk/io.github.cl-sdk.json" :ref nil :branch "main" :tag nil)
+  :version "github-f1d632e1f629409e650009567a2d35e4bd0dc842"))
+("meta-definitions" .
+ (:class qlot/source/github:source-github
+  :initargs (:repos "cl-sdk/meta-definitions" :ref nil :branch "main" :tag nil)
+  :version "github-41e5c29f68181d0d6eee0a627b94b70ab2402019"))

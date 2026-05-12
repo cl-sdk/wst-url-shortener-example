@@ -8,7 +8,7 @@
 (defmethod parse-content
     ((type (eql :|application/json|)) content &optional (encoding :utf-8))
   (declare (ignore type))
-  (com.inuoe.jzon:parse (content-as-string content encoding)))
+  (io.github.cl-sdk.json:parse (content-as-string content encoding)))
 
 (defun index-handler (request response)
   (declare (ignore request))

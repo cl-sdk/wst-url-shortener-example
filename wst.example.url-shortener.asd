@@ -8,6 +8,7 @@
                #:io.github.cl-sdk.wst.routing.woo
                #:io.github.cl-sdk.wst.request-content
                #:io.github.cl-sdk.wst.request-content.routing
+	       #:io.github.cl-sdk.json
                #:woo)
   :serial t
   :pathname "src"
