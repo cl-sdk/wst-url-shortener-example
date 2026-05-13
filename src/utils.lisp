@@ -3,22 +3,19 @@
 (defconstant +base62-alphabet+ "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ")
 (defconstant +http-scheme-prefix+ "http://")
 (defconstant +https-scheme-prefix+ "https://")
-(defconstant +sigint+ 2)
-(defconstant +sigquit+ 3)
-(defconstant +sigterm+ 15)
 
 (defun integer->base62 (value)
   (if (zerop value)
       "0"
       (loop with result = ""
-            with quotient = value
-            while (> quotient 0)
-            for remainder = (mod quotient 62)
-            do (setf result (concatenate 'string
-                                         (string (char +base62-alphabet+ remainder))
-                                         result)
-                     quotient (floor quotient 62))
-            finally (return result))))
+	    with quotient = value
+	    while (> quotient 0)
+	    for remainder = (mod quotient 62)
+	    do (setf result (concatenate 'string
+					 (string (char +base62-alphabet+ remainder))
+					 result)
+		     quotient (floor quotient 62))
+	    finally (return result))))
 
 (defun trim-whitespace (text)
   (string-trim '(#\Space #\Tab #\Newline #\Return) text))
@@ -43,14 +40,3 @@
 (defun request-short-code (request)
   (with-request-data (params) request
     (cdr (assoc "code" params :test #'string-equal))))
-
-(defun woo-signal-symbol (name)
-  (or (find-symbol name :woo.signal)
-     (error "Woo internal symbol ~a not found in package WOO.SIGNAL" name)))
-
-(defun make-graceful-shutdown-signals ()
-  "Map SIGINT/SIGQUIT/SIGTERM to Woo's graceful shutdown callback."
-  (let ((graceful-callback-symbol (woo-signal-symbol "SIGQUIT-CB")))
-    (list (cons +sigint+ graceful-callback-symbol)
-          (cons +sigquit+ graceful-callback-symbol)
-          (cons +sigterm+ graceful-callback-symbol))))
