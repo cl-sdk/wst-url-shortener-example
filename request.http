@@ -1,12 +1,6 @@
-# Restclient requests for examples/url-shortener/main.lisp
-# Start the app first:
-#   sbcl --load examples/url-shortener/main.lisp
-
-# restclient variable syntax
 :base = http://localhost:3000
 
-# Index
-GET :base/
+:code = 7o044QyIzD
 
 #
 # Health
@@ -32,18 +26,15 @@ GET :base/api/v1/links
 
 #
 # Inspect one short URL by code
-# Replace `1` with an existing code from the create response.
-GET :base/api/v1/links/1
+GET :base/api/v1/links/:code
 
 #
 # Resolve short URL by code (redirect)
-# Replace `1` with an existing code.
-GET :base/1
+GET :base/:code
 
 #
 # Delete one short URL by code
-# Replace `1` with an existing code.
-DELETE :base/api/v1/links/1
+DELETE :base/api/v1/links/:code
 
 #
 # Invalid create request (missing url)
