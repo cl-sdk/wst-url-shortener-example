@@ -23,7 +23,7 @@
 	  (let ((rows (loop for key being the hash-keys of content
 			      using (hash-value value)
 			    collect (list key value))))
-	    (io.github.cl-sdk.csv:write-csv rows s :headers '("key" "value")))))
+	    (io.github.cl-sdk.csv:write-csv rows s :headers '("code" "url") :always-quote t))))
   response)
 
 (defun response-not-found (request response)
