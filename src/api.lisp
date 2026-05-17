@@ -1,7 +1,5 @@
 (in-package #:wst.example.url-shortener)
 
-(defparameter *base-url* "http://localhost:3000")
-
 (defmethod parse-content
     ((type (eql :|application/json|)) content &optional (encoding :utf-8))
   (declare (ignore type))
@@ -66,7 +64,7 @@
 	    _))
 	  (let* ((code (create-short-url app-data target-url))
 		 (short-path (format nil "/~a" code))
-		 (short-url (format nil "~a~a" *base-url* short-path)))
+		 (short-url (format nil "~a~a" (slot-value app-data 'base-url) short-path)))
 	    (serapeum:~>>
 	     response
 	     (status 201)

@@ -4,6 +4,9 @@
   ((next-id :initform 100000000000000000
             :initarg :next-id
             :documentation "Holds the current id to generate the next url identifier.")
+   (base-url :initform "http://localhost:3000"
+             :initarg :base-url
+             :documentation "Base CNAME (+ port) to access the short link.")
    (data :initform (make-hash-table :test 'equal)
          :initarg :data
          :documentation "Data storage.")
