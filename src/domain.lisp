@@ -4,7 +4,11 @@
 (defparameter *short-url-store* (make-hash-table :test 'equal))
 #+sbcl
 (defparameter *short-url-store-lock*
-  (sb-thread:make-mutex :name "url-shortener-store"))
+  #+sbcl
+  (sb-thread:make-mutex :name "url-shortener-store")
+  #-sbcl
+  nil
+  "Store mutex.")
 
 (defmacro with-short-url-store-lock (&body body)
   #+sbcl
