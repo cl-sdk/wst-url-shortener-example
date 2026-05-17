@@ -5,6 +5,11 @@
 
 (defparameter *base-url* "http://localhost:3000")
 
+(defmethod parse-content
+    ((type (eql :|application/json|)) content &optional (encoding :utf-8))
+  (declare (ignore type))
+  (io.github.cl-sdk.json:parse (content-as-string content encoding)))
+
 (defmethod io.github.cl-sdk.wst.routing.response.dsl:json
     ((implementation (eql :|application/json|)) content response)
   (log:info 'io.github.cl-sdk.wst.routing.response.dsl:json)
@@ -25,11 +30,6 @@
 			    collect (list key value))))
 	    (io.github.cl-sdk.csv:write-csv rows s :headers '("key" "value")))))
   response)
-
-(defmethod parse-content
-    ((type (eql :|application/json|)) content &optional (encoding :utf-8))
-  (declare (ignore type))
-  (io.github.cl-sdk.json:parse (content-as-string content encoding)))
 
 (defun response-not-found (request response)
   (with-request-data (accept)
