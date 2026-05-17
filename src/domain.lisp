@@ -4,7 +4,7 @@
 (defparameter *next-short-id* 100000000000000000)
 #+sbcl
 (defparameter *short-url-store-lock*
-  (sb-thread:make-mutex :name "woo-url-shortener-store"))
+  (sb-thread:make-mutex :name "url-shortener-store"))
 
 (defmacro with-short-url-store-lock (&body body)
   #+sbcl
