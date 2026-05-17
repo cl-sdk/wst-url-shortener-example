@@ -4,8 +4,8 @@
   :version "2026-01-01"))
 ("wst" .
  (:class qlot/source/github:source-github
-  :initargs (:repos "cl-sdk/wst" :ref nil :branch nil :tag "0.4.0")
-  :version "github-784d4eaf369cd3fe903da5b124294870b36358f7"))
+  :initargs (:repos "cl-sdk/wst" :ref nil :branch nil :tag "0.4.2")
+  :version "github-f73ec9deb915eab89af9268ba00ddadeebaa607e"))
 ("io.github.cl-sdk.json" .
  (:class qlot/source/github:source-github
   :initargs (:repos "cl-sdk/io.github.cl-sdk.json" :ref nil :branch "main" :tag nil)

@@ -1,39 +1,47 @@
 (in-package #:wst.example.url-shortener)
 
-(defparameter *next-short-id* 100000000000000000)
-(defparameter *short-url-store* (make-hash-table :test 'equal))
-#+sbcl
-(defparameter *short-url-store-lock*
-  #+sbcl
-  (sb-thread:make-mutex :name "url-shortener-store")
-  #-sbcl
-  nil
-  "Store mutex.")
+(defclass url-database ()
+  ((next-id :initform 100000000000000000
+            :initarg :next-id
+            :documentation "Holds the current id to generate the next url identifier.")
+   (data :initform (make-hash-table :test 'equal)
+         :initarg :data
+         :documentation "Data storage.")
+   (lock :initarg :lock
+         :initform
+         #+sbcl
+         (sb-thread:make-mutex :name "url-shortener-store")
+         #-sbcl
+         nil
+         :documentation "Store mutex.")))
 
-(defmacro with-short-url-store-lock (&body body)
+(defmacro with-short-url-store-lock (url-database &body body)
   #+sbcl
-  `(sb-thread:with-mutex (*short-url-store-lock*)
+  `(sb-thread:with-mutex ((slot-value ,url-database 'lock))
      ,@body)
   #-sbcl
   `(progn ,@body))
 
-(defun create-short-url (target-url)
-  (with-short-url-store-lock
-    (let ((candidate (integer->base62 (incf *next-short-id*))))
-      (setf (gethash candidate *short-url-store*) target-url)
+(defun generate-next-id (url-database)
+  (integer->base62 (incf (slot-value url-database 'next-id))))
+
+(defun create-short-url (app-data target-url)
+  (with-short-url-store-lock app-data
+    (let ((candidate (generate-next-id app-data)))
+      (setf (gethash candidate (slot-value app-data 'data)) target-url)
       candidate)))
 
-(defun find-short-url (code)
-  (with-short-url-store-lock
-    (gethash code *short-url-store*)))
+(defun find-short-url (app-data code)
+  (with-short-url-store-lock app-data
+    (gethash code (slot-value app-data 'data))))
 
-(defun remove-short-url (code)
-  (with-short-url-store-lock
-    (remhash code *short-url-store*)))
+(defun remove-short-url (app-data code)
+  (with-short-url-store-lock app-data
+    (remhash code (slot-value app-data 'data))))
 
-(defun all-short-urls ()
-  (with-short-url-store-lock
-    *short-url-store*))
+(defun all-short-urls (app-data)
+  (with-short-url-store-lock app-data
+    (slot-value app-data 'data)))
 
 (defun normalize-target-url (url)
   (when (stringp url)

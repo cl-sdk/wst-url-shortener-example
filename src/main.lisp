@@ -73,4 +73,5 @@
 	(request-graceful-stop)
 	(start-server :port target-port))))
 
+(setf *break-on-signals* t)
 (start-server)

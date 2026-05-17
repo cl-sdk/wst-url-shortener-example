@@ -53,7 +53,7 @@
 
 (defun create-short-url-handler (request response)
   (log:info 'create-short-url-handler)
-  (with-request-data (accept)
+  (with-request-data (accept app-data)
       request
     (let* ((raw-url (request-url request))
 	   (target-url (normalize-target-url raw-url)))
@@ -67,7 +67,7 @@
 	     ("message" "url field is required and cannot be empty"))
 	    request
 	    _))
-	  (let* ((code (create-short-url target-url))
+	  (let* ((code (create-short-url app-data target-url))
 		 (short-path (format nil "/~a" code))
 		 (short-url (format nil "~a~a" *base-url* short-path)))
 	    (serapeum:~>>
@@ -83,20 +83,23 @@
 
 (defun list-short-urls-handler (request response)
   (log:info 'list-short-urls-handler)
-  (with-request-data (accept)
+  (with-request-data (accept app-data)
       request
     (serapeum:~>>
      response
      (status 200)
      (io.github.cl-sdk.wst.request-accept:respond-with
-      accept (all-short-urls) request _))))
+      accept
+      (all-short-urls app-data)
+      request
+      _))))
 
 (defun inspect-short-url-handler (request response)
   (log:info 'inspect-short-url-handler)
-  (with-request-data (accept)
+  (with-request-data (accept app-data)
       request
     (let* ((code (request-short-code request))
-	   (target-url (find-short-url code)))
+	   (target-url (find-short-url app-data code)))
       (log:info target-url)
       (cond
 	((not (null target-url))
@@ -112,14 +115,14 @@
 	(t (response-not-found request response))))))
 
 (defun delete-short-url-handler (request response)
-  (with-request-data (accept)
+  (with-request-data (accept app-data)
       request
     (let* ((code (request-short-code request))
-	   (target-url (find-short-url code)))
+	   (target-url (find-short-url app-data code)))
       (cond
 	((not (null target-url))
 	 (progn
-	   (remove-short-url code)
+	   (remove-short-url app-data code)
 	   (serapeum:~>>
 	    response
 	    (status 200)
@@ -128,22 +131,24 @@
 	     (cl-hash-util:hash ("code" code)
 				("target_url" target-url))
 	     request
-	     _))
-	   (response-not-found request response)))))))
+	     _))))
+	(t (response-not-found request response))))))
 
 (defun redirect-short-url-handler (request response)
   (log:info 'redirect-short-url-handler)
-  (let* ((code (request-short-code request))
-	 (target-url (find-short-url code)))
-    (log:info target-url)
-    (cond
-      ((not (null target-url))
-       (serapeum:~>>
-	response
-	(status 303)
-	(location target-url)
-	(text "")))
-      (t (response-not-found request response)))))
+  (with-request-data (app-data)
+      request
+    (let* ((code (request-short-code request))
+	   (target-url (find-short-url app-data code)))
+      (log:info target-url)
+      (cond
+	((not (null target-url))
+	 (serapeum:~>>
+	  response
+	  (status 303)
+	  (location target-url)
+	  (text "")))
+	(t (response-not-found request response))))))
 
 (defun not-found-handler (request response)
   (response-not-found request response))
@@ -160,8 +165,7 @@
 		      response-accepts
 		      request-accept)))
 	(log:info request-accept response-accepts accept)
-	(setf (request-data request)
-	      (append (request-data request) (list :accept (car accept))))
+	(append-request-data request :accept (car accept))
 	(cons :continue response)))))
 
 (defun build-app-routes ()
@@ -182,12 +186,18 @@
 	     :custom (:response-accepts (:|application/json| :|text/csv| :|text/plain|)))
 	 (:route :GET list-short-urls list-short-urls-handler
 	     :custom (:response-accepts (:|application/json| :|text/csv| :|text/plain|)))
-	 (:route :GET inspect-short-url "/:code" inspect-short-url-handler)
-	 (:route :DELETE delete-short-url "/:code" delete-short-url-handler))))
+	 (:route :GET inspect-short-url "/:code" inspect-short-url-handler
+	   :custom (:response-accepts (:|application/json| :|text/csv| :|text/plain|)))
+	 (:route :DELETE delete-short-url "/:code" delete-short-url-handler
+	   :custom (:response-accepts (:|application/json|))))))
       (:route :GET redirect-short-url "/:code" redirect-short-url-handler)
       (:any-route :GET not-found-handler)))))
 
+(defparameter +app-data+
+  (make-instance 'url-database))
+
 (defun app (env)
-  (let* ((request (request-from-woo-env env))
+  (let* ((request (append-request-data
+		   (request-from-woo-env env) :app-data +app-data+))
 	 (response (dispatch-route request)))
     (response-to-woo-response response)))
