@@ -193,7 +193,7 @@
       (:any-route :GET not-found-handler)))))
 
 (defparameter +app-data+
-  (make-instance 'url-database))
+  (make-instance 'app-data))
 
 (defun app (env)
   (let* ((request (append-request-data
