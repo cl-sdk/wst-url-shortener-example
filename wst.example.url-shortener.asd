@@ -3,8 +3,10 @@
   :author "Bruno Dias"
   :license "Unlicense"
   :version "0.0.1"
-  :depends-on (#:cl-hash-util
+  :depends-on (#:log4cl
+	       #:cl-hash-util
 	       #:io.github.cl-sdk.json
+	       #:io.github.cl-sdk.csv
 	       #:woo
 	       #:serapeum
 	       #:io.github.cl-sdk.wst.routing
@@ -12,7 +14,8 @@
 	       #:io.github.cl-sdk.wst.routing.woo
 	       #:io.github.cl-sdk.wst.request-content
 	       #:io.github.cl-sdk.wst.request-content.routing
-	       #:io.github.cl-sdk.wst.routing.response.dsl)
+	       #:io.github.cl-sdk.wst.routing.response.dsl
+	       #:io.github.cl-sdk.wst.request-accept)
   :serial t
   :pathname "src"
   :components ((:file "package")

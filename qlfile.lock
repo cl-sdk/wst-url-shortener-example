@@ -4,8 +4,8 @@
   :version "2026-01-01"))
 ("wst" .
  (:class qlot/source/github:source-github
-  :initargs (:repos "cl-sdk/wst" :ref nil :branch nil :tag "0.3.0")
-  :version "github-dd138850cc95811fcf2a3b58eaf1580e743993a2"))
+  :initargs (:repos "cl-sdk/wst" :ref nil :branch nil :tag "0.4.0")
+  :version "github-784d4eaf369cd3fe903da5b124294870b36358f7"))
 ("io.github.cl-sdk.json" .
  (:class qlot/source/github:source-github
   :initargs (:repos "cl-sdk/io.github.cl-sdk.json" :ref nil :branch "main" :tag nil)
@@ -22,3 +22,7 @@
  (:class qlot/source/github:source-github
   :initargs (:repos "ruricolist/serapeum" :ref nil :branch "master" :tag nil)
   :version "github-c4dcbb6e48e9b713ba66fdee480a84384ef3dac4"))
+("io.github.cl-sdk.csv" .
+ (:class qlot/source/github:source-github
+  :initargs (:repos "cl-sdk/io.github.cl-sdk.csv" :ref nil :branch nil :tag nil)
+  :version "github-c141b3731caf16d8da5418b11f7be2065f56ac82"))

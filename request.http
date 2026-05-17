@@ -21,8 +21,13 @@ Content-Type: application/json
 {"url":"https://common-lisp.net"}
 
 #
-# List all short URLs
+# List all short URLs as json
 GET :base/api/v1/links
+Accept: application/json
+
+# List all short URLs as csv
+GET :base/api/v1/links
+Accept: text/csv
 
 #
 # Inspect one short URL by code
