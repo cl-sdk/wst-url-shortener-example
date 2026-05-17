@@ -1,8 +1,5 @@
 (in-package #:wst.example.url-shortener)
 
-(defparameter *parse-content-middleware*
-  (parse-request-content))
-
 (defparameter *base-url* "http://localhost:3000")
 
 (defmethod parse-content
@@ -153,6 +150,9 @@
 (defun not-found-handler (request response)
   (response-not-found request response))
 
+(defparameter +parse-content-middleware+
+  (parse-request-content))
+
 (defparameter +accept-middleware+
   (lambda (request response)
     (with-request-data (route)
@@ -173,7 +173,8 @@
 
   (io.github.cl-sdk.wst.routing.dsl:build-webserver
    `(:wrap
-     :before (,+accept-middleware+ ,*parse-content-middleware*)
+     :before (,+accept-middleware+
+	      ,+parse-content-middleware+)
      :route
      (:group
       (:route :GET health "/health" health-handler)
