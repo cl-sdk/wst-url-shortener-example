@@ -2,21 +2,27 @@
 
 (defmethod parse-content
     ((type (eql :|application/json|)) content &optional (encoding :utf-8))
+  "Defines a request content parser when `request`'s Content-Type is `application/json`.
+The parsed object overides the previous request content."
   (declare (ignore type))
   (io.github.cl-sdk.json:parse (content-as-string content encoding)))
 
 (defmethod io.github.cl-sdk.wst.routing.response.dsl:json
     ((implementation (eql :|application/json|)) content response)
+  "Defines an implementation for `(json implementation content response)` to transform
+the CONTENT to a valid RESPONSE content."
   (log:info 'io.github.cl-sdk.wst.routing.response.dsl:json)
   (io.github.cl-sdk.wst.routing.response.dsl:json t (io.github.cl-sdk.json:stringify content) response))
 
 (defmethod io.github.cl-sdk.wst.request-accept:respond-with
     ((implementation (eql :|application/json|)) content request response)
+  "Defines an IMPLEMENTATION to respond when the client says that it accepts `application/json`."
   (log:info 'io.github.cl-sdk.wst.request-accept:respond-with)
   (io.github.cl-sdk.wst.routing.response.dsl:json :|application/json| content response))
 
 (defmethod io.github.cl-sdk.wst.request-accept:respond-with
     ((implementation (eql :|text/csv|)) content request response)
+  "Defines an IMPLEMENTATION to respond when the client says that it accepts `text/csv`."
   (headers (list :content-type implementation) response)
   (setf (response-content response)
 	(with-output-to-string (s)
@@ -27,6 +33,7 @@
   response)
 
 (defun response-not-found (request response)
+  "Common not found response."
   (with-request-data (accept)
       request
     (serapeum:~>>
@@ -39,6 +46,7 @@
       _))))
 
 (defun health-handler (request response)
+  "Endpoint for health check."
   (declare (ignore request))
   (log:info 'health-handler)
   (serapeum:~>>
@@ -47,6 +55,7 @@
    (text "ok")))
 
 (defun create-short-url-handler (request response)
+  "Endpoint to shorten the urls."
   (log:info 'create-short-url-handler)
   (with-request-data (accept app-data)
       request
@@ -77,6 +86,7 @@
 	      request _)))))))
 
 (defun list-short-urls-handler (request response)
+  "Endpoint to list shorten the urls."
   (log:info 'list-short-urls-handler)
   (with-request-data (accept app-data)
       request
@@ -90,6 +100,7 @@
       _))))
 
 (defun inspect-short-url-handler (request response)
+  "Endpoint to retrieve an registered url by code."
   (log:info 'inspect-short-url-handler)
   (with-request-data (accept app-data)
       request
@@ -110,6 +121,7 @@
 	(t (response-not-found request response))))))
 
 (defun delete-short-url-handler (request response)
+  "Endpoint to delete an url by code."
   (with-request-data (accept app-data)
       request
     (let* ((code (request-short-code request))
@@ -130,6 +142,7 @@
 	(t (response-not-found request response))))))
 
 (defun redirect-short-url-handler (request response)
+  "Endpoint to return a response ready to follow the target url."
   (log:info 'redirect-short-url-handler)
   (with-request-data (app-data)
       request
@@ -146,10 +159,12 @@
 	(t (response-not-found request response))))))
 
 (defun not-found-handler (request response)
+  "Endpoint to accept all invalid paths."
   (response-not-found request response))
 
 (defparameter +parse-content-middleware+
-  (parse-request-content))
+  (parse-request-content)
+  "Middlware to parse the content according to the request's `Content-Type`.")
 
 (defparameter +accept-middleware+
   (lambda (request response)
@@ -164,9 +179,12 @@
 		      request-accept)))
 	(log:info request-accept response-accepts accept)
 	(append-request-data request :accept (car accept))
-	(cons :continue response)))))
+	(cons :continue response))))
+  "Middlware to transform the resultant object into a response content
+ according to the request's `ACCEPT`.")
 
 (defun build-app-routes ()
+  "Builds the application routes."
   (condition-handler #'development-condition-handler)
 
   (io.github.cl-sdk.wst.routing.dsl:build-webserver
@@ -193,9 +211,11 @@
       (:any-route :GET not-found-handler)))))
 
 (defparameter +app-data+
-  (make-instance 'app-data))
+  (make-instance 'app-data)
+  "Application state.")
 
 (defun app (env)
+  "A woo web server application function to receive all the requests."
   (let* ((request (append-request-data
 		   (request-from-woo-env env) :app-data +app-data+))
 	 (response (dispatch-route request)))

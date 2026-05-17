@@ -20,9 +20,11 @@
          #-sbcl
          nil
          :accessor app-data-lock
-         :documentation "Store mutex.")))
+         :documentation "Store mutex."))
+  (:documentation "Application data"))
 
 (defmacro with-short-url-store-lock (app-data &body body)
+  "Macro to make it simple to acquire the store's lock."
   #+sbcl
   `(sb-thread:with-mutex ((app-data-lock ,app-data))
      ,@body)
@@ -30,23 +32,28 @@
   `(progn ,@body))
 
 (defun generate-next-id (app-data)
+  "Generate a base 62 string of the next id stored on the application data."
   (integer->base62 (incf (app-data-next-id app-data))))
 
-(defun create-short-url (app-data target-url)
+(defun create-short-url (app-data url)
+  "With context APP-DATA, shorten the URL and return its identifier."
   (with-short-url-store-lock app-data
     (let ((candidate (generate-next-id app-data)))
-      (setf (gethash candidate (app-data-data app-data)) target-url)
+      (setf (gethash candidate (app-data-data app-data)) url)
       candidate)))
 
 (defun find-short-url (app-data code)
+  "With context APP-DATA, find the url for CODE."
   (with-short-url-store-lock app-data
     (gethash code (app-data-data app-data))))
 
 (defun remove-short-url (app-data code)
+  "With context APP-DATA, remove the url of CODE."
   (with-short-url-store-lock app-data
     (remhash code (app-data-data app-data))))
 
 (defun all-short-urls (app-data)
+  "With context APP-DATA, return all the shorten urls."
   (with-short-url-store-lock app-data
     (app-data-data app-data)))
 

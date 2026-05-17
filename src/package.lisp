@@ -9,6 +9,16 @@
 		#:text
 		#:headers
 		#:json
-		#:status))
+		#:status)
+  (:documentation "This is a projet playground to test some features 
+of the WST's project.
+
+The goal is to provide tools to create web applications in Common Lisp.
+
+You can find the project at:
+
+- https://github.com/cl-sdk/io.github.cl-sdk.wst
+
+LICENSE: Unlicense"))
 
 (in-package #:wst.example.url-shortener)
